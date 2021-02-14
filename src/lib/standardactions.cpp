@@ -91,15 +91,15 @@ Core::TermAction::TermAction(const QString &text, const QString &script, Core::T
         commandline_ << pwd->pw_shell << "-ic" << script;
         break;
     case CloseBehavior::CloseOnSuccess:
-        commandline_ << pwd->pw_shell << "-ic" << QString("%1 || exec %2").arg(script, pwd->pw_shell);
+        commandline_ << pwd->pw_shell << "-ic" << QString("\'%1 || exec %2\'").arg(script, pwd->pw_shell);
         break;
     case CloseBehavior::DoNotClose:
-        commandline_ << pwd->pw_shell << "-ic" << QString("%1; exec %2").arg(script, pwd->pw_shell);
+        commandline_ << pwd->pw_shell << "-ic" << QString("\'%1; exec %2\'").arg(script, pwd->pw_shell);
     }
 }
 
 
 /** **************************************************************************/
 void Core::TermAction::activate() const {
-    runDetached(terminalCommand.split(QChar(QChar::Space), QString::SkipEmptyParts) << commandline_, workingDir_);
+    runDetached(terminalCommand.split(QChar(QChar::Space), QString::SkipEmptyParts) << commandline_.join(QChar::Space), workingDir_);
 }
